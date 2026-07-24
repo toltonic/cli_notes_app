@@ -15,4 +15,10 @@ int note_add(const char *filename,
              const char *title,
              const char *body);
 
+Note note_find(const char *filename,
+               int id);
+
+void note_print_from_id(const char *filename,
+                int id);
+
 #endif
