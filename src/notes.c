@@ -9,9 +9,15 @@ int note_add(const char *filename,
              const char *title,
              const char *body){
 
-    FILE *fp = fopen(filename, "r+");
+    FILE *fp = fopen(filename, "wb");
+    if (fp == NULL){
+	return 0;
+    }
 
-    Note *note;
+    Note *note = malloc(sizeof(Note));;
+    if(note == NULL){
+	return 0;
+    }
 
     note->id = 1;
     strcpy(note->title, title);
@@ -21,6 +27,8 @@ int note_add(const char *filename,
 
     fwrite(note, sizeof(Note), 1, fp);
     fclose(fp);
+
+    free(note);
 
     return 1;
 }

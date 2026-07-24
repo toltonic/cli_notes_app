@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include "notes.h"
 
-int main(int argc, char argv[]){
+int main(int argc, char *argv[]){
 
-    char *lit = "this shit";
+    char *lit = "Whatever";
+
     char *This = "this is the body";
 
 
