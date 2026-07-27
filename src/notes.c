@@ -6,32 +6,31 @@
 // user defined library
 #include "notes.h"
 
+/* 
+ * ==========================
+ * note funcs
+ * ==========================
+ */
 // add a note
-int note_add(const char *filename,
-             const char *title,
-             const char *body){
+Note
+*note_create(const char *title,
+            const char *body){
 
-    FILE *fp = fopen(filename, "wb");
-    if (fp == NULL){
-        printf("Could not open file %s\n", filename);
-        return 0;
+    Note *note = malloc(sizeof(Note));
+    if (note == NULL){
+        return note;
     }
 
-    Note note = {0};
-    Note *pnote = &note;
+    strcpy(note->title, title);
+    strcpy(note->body, body);
 
-    note.id = 1;
-    strcpy(note.title, title);
-    strcpy(note.body, body);
-
-    fwrite(pnote, sizeof(Note), 1, fp);
-    fclose(fp);
-
-
-    return 1;
+    return note;
 }
+
+
 /*
-Note note_find(const char *filename,
+Note
+note_find(const char *filename,
                int id){
     FILE *fp = fopen(filename, "rb");
     if (fp == NULL){
@@ -42,8 +41,9 @@ Note note_find(const char *filename,
 */
 
 // print a note from an id
-void note_print_from_id(const char *filename,
-                int id){
+void
+note_print_from_id(const char *filename,
+                   int id){
     FILE *fp;
     Note *pnote;
     size_t ret;
@@ -67,4 +67,46 @@ void note_print_from_id(const char *filename,
     fclose(fp);
 
     printf("%d\n%s\n%s\n", note.id, note.title, note.body);
+}
+/* 
+ * =====================
+ * list funcs
+ * =====================
+ */
+void
+list_init(NoteList *list){
+    list->size = 0;
+    list->head = NULL;
+}
+
+int
+load_list(const char *filename,
+          NoteList *list){
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL){
+        printf("Could not load list");
+        return 0;
+    }
+
+    ret = fread(
+
+    return 1;
+}
+
+int
+list_add(NoteList *list, Note *note){
+
+    note->next = list->head;
+    list->head = note;
+    
+    return 1;
+}
+
+int
+list_save(const char *filename,
+          Note note){
+    
+    
+
+    return 1;
 }

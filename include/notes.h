@@ -5,20 +5,45 @@
 #define MAX_BODY_LENGTH 256
 #define DATA_FILE "data/notes.dat"
 
-typedef struct Note{
+typedef struct
+}
     int id;
     char title[MAX_TITLE_LENGTH];
     char body[MAX_BODY_LENGTH];
+    struct Note *next;
 } Note;
 
-int note_add(const char *filename,
-             const char *title,
-             const char *body);
+typedef struct
+{
+    int size;
+    Note *head;
+} NoteList;
 
-Note note_find(const char *filename,
-               int id);
+/* ============================
+ * Note stuff
+ * ============================
+ */
+int
+note_add(const char *filename,
+         const char *title,
+         const char *body);
 
-void note_print_from_id(const char *filename,
-                int id);
+void
+note_print_from_id(const char *filename,
+                   int id);
+/* ============================
+ * Linked list stuff
+ * ============================
+ * */
+void
+list_init(NoteList *list);
+
+int
+load_list(const char *filename,
+          NoteList *note);
+
+int
+list_save(const char *filename,
+          Note note);
 
 #endif

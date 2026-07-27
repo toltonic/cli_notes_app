@@ -1,9 +1,9 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Iinclude
 
-TARGET = test
+TARGET = notes
 
-SRC = src/main.c \
+SRC = src/lit.c \
 	  src/notes.c
 
 $(TARGET): $(SRC)
