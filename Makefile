@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -I./include
 
 TARGET = notes
 
-SRC = src/lit.c \
+SRC = src/main.c \
       src/notes.c
 
 $(TARGET): $(SRC)

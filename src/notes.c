@@ -14,7 +14,7 @@
 // add a note
 Note
 *note_create(const char *title,
-            const char *body){
+        const char *body){
 
     Note *note = malloc(sizeof(Note));
     if (note == NULL){
@@ -30,44 +30,32 @@ Note
 
 
 /*
-Note
-note_find(const char *filename,
-               int id){
-    FILE *fp = fopen(filename, "rb");
-    if (fp == NULL){
-        printf("Could not open file %s\n", filename);
-        return;
-    }
-}
-*/
+   Note
+   note_find(const char *filename,
+   int id){
+   FILE *fp = fopen(filename, "rb");
+   if (fp == NULL){
+   printf("Could not open file %s\n", filename);
+   return;
+   }
+   }
+   */
 
 // print a note from an id
 void
-note_print_from_id(const char *filename,
-                   int id){
-    FILE *fp;
-    Note *pnote;
-    size_t ret;
-    char buffer[2000] = {0};
-
-    fp = fopen(filename, "rb");
-    if (fp == NULL){
-        printf("Could not open file %s\n", filename);
+note_print_all(NoteList *list){
+    if (list->head == NULL){
+        printf("list is empty");
         return;
     }
 
-    Note note = {0};
-    pnote = &note;
+    Note *note = list->head;
 
-    ret = fread(pnote, sizeof(Note), 1, fp);
-    if (ret != 1){
-        printf("Failed to read\n");
-        return;
+    while(note != NULL){
+        printf("title: %s\nbody: %s\n", note->title, note->body);
+
+        note = note->next;
     }
-
-    fclose(fp);
-
-    printf("%d\n%s\n%s\n", note.id, note.title, note.body);
 }
 /* 
  * =====================
@@ -78,59 +66,97 @@ void
 list_init(NoteList *list){
     list->size = 0;
     list->head = NULL;
-    printf("initializing list\n");
 }
 
 int
 load_list(const char *filename,
-          NoteList *list){
+        NoteList *list){
+
     FILE *fp = fopen(filename, "r");
+    //FOR TESTING
+    int counter = 0;
     if (fp == NULL){
         printf("Could not load list\n");
         return 0;
     }
 
-    //ret = fread(
+    while (true){
+
+        Note *note = malloc(sizeof(Note));
+        if(note == NULL){
+            return 0;
+        }
+
+        int ret = fread(note, sizeof(Note), 1, fp);
+        if(ret != 1){
+            free(note);
+            fclose(fp);
+            return 0;
+        }
+
+        list_add(list, note);
+
+        note = note->next;
+
+        counter++;
+
+        printf("%d\n", counter);
+    }
+
+    fclose(fp);
 
     return 1;
 }
 
 int
 list_add(NoteList *list,
-	 Note *note){
+        Note *note){
 
     if (note == NULL){
-	return 0;
+        return 0;
     }
-    printf("adding note to list\n");
 
     note->next = list->head;
     list->head = note;
-    
+    list->size++;
+
     return 1;
 }
 
 int
 list_save(const char *filename,
-          NoteList *list){
-    printf("saving list to file\n");
-    
-    FILE *fp = fopen(filename, "w");
+        NoteList *list){
+
     int ret = 0;
+
+    FILE *fp = fopen(filename, "w");
     if (fp == NULL){
-	return 0;
+        return 0;
     }
 
     Note *note = list->head;
 
-    while (note != NULL){
-	ret = fwrite(note, sizeof(Note), 1, fp);
-	if (ret != sizeof(note)){
-	    printf("could not write note\n");
-	}
-	note = note->next;
-    }
+    Note *note_old = note;
 
+    while (note != NULL){
+
+        ret = fwrite(note, sizeof(Note), 1, fp);
+        if (ret != 1){
+            printf("could not write note\n");
+            fclose(fp);
+            return 0;
+        }
+
+        note = note->next;
+        free(note_old);
+        note_old = note;
+
+    }
+    
     fclose(fp);
+
+    list->head = NULL;
+    list->size = 0;
+
     return 1;
 }

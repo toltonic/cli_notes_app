@@ -28,8 +28,7 @@ Note
             const char *body);
 
 void
-note_print_from_id(const char *filename,
-                   int id);
+note_print_all(NoteList *list);
 /* ============================
  * Linked list stuff
  * ============================

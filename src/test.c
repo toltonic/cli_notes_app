@@ -11,8 +11,10 @@ main(){
 
     char *title = "wefds";
     char *itle = "iyurhnt";
+    char *tle = "3rd";
     char *body = "dienadlsfeh";
     char *ody = "asdfdsf";
+    char *dy = "this is the third body";
 
     NoteList list;
 
@@ -26,8 +28,27 @@ main(){
 
     list_add(&list, ote);
 
+    note_print_all(&list);
+
     list_save(DATA_FILE, &list);
 
+    note_print_all(&list);
+
+    load_list(DATA_FILE, &list);
+
+    note_print_all(&list);
+
+    Note *te = note_create(tle, dy);
+
+    list_add(&list, te);
+
+    list_save(DATA_FILE, &list);
+
+    load_list(DATA_FILE, &list);
+
+    note_print_all(&list);
+
+    list_save(DATA_FILE, &list);
     return 0;
 }
 
