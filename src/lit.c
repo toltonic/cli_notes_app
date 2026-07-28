@@ -9,16 +9,25 @@
 int
 main(){
 
-    char *title = "title";
-    char *body = "body";
+    char *title = "wefds";
+    char *itle = "iyurhnt";
+    char *body = "dienadlsfeh";
+    char *ody = "asdfdsf";
 
-    NoteList *list;
+    NoteList list;
 
-    list_init(list);
+    list_init(&list);
 
-    note_create(tile, body);
+    Note *note = note_create(title, body);
 
-    printf("%d\n)", sizeof(NoteList));
+    list_add(&list, note);
 
+    Note *ote = note_create(itle, ody);
+
+    list_add(&list, ote);
+
+    list_save(DATA_FILE, &list);
+
+    return 0;
 }
 

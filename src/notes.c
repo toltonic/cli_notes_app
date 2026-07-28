@@ -20,6 +20,7 @@ Note
     if (note == NULL){
         return note;
     }
+    printf("creating note\n");
 
     strcpy(note->title, title);
     strcpy(note->body, body);
@@ -77,6 +78,7 @@ void
 list_init(NoteList *list){
     list->size = 0;
     list->head = NULL;
+    printf("initializing list\n");
 }
 
 int
@@ -84,17 +86,23 @@ load_list(const char *filename,
           NoteList *list){
     FILE *fp = fopen(filename, "r");
     if (fp == NULL){
-        printf("Could not load list");
+        printf("Could not load list\n");
         return 0;
     }
 
-    ret = fread(
+    //ret = fread(
 
     return 1;
 }
 
 int
-list_add(NoteList *list, Note *note){
+list_add(NoteList *list,
+	 Note *note){
+
+    if (note == NULL){
+	return 0;
+    }
+    printf("adding note to list\n");
 
     note->next = list->head;
     list->head = note;
@@ -104,9 +112,25 @@ list_add(NoteList *list, Note *note){
 
 int
 list_save(const char *filename,
-          Note note){
+          NoteList *list){
+    printf("saving list to file\n");
     
-    
+    FILE *fp = fopen(filename, "w");
+    int ret = 0;
+    if (fp == NULL){
+	return 0;
+    }
 
+    Note *note = list->head;
+
+    while (note != NULL){
+	ret = fwrite(note, sizeof(Note), 1, fp);
+	if (ret != sizeof(note)){
+	    printf("could not write note\n");
+	}
+	note = note->next;
+    }
+
+    fclose(fp);
     return 1;
 }
