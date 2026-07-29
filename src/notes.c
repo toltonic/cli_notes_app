@@ -45,14 +45,16 @@ Note
 void
 note_print_all(NoteList *list){
     if (list->head == NULL){
-        printf("list is empty");
+        printf("list is empty\n");
         return;
     }
+
+    printf("Listing notes...\n");
 
     Note *note = list->head;
 
     while(note != NULL){
-        printf("title: %s\nbody: %s\n", note->title, note->body);
+        printf("title: %sbody: %s\n", note->title, note->body);
 
         note = note->next;
     }
@@ -94,9 +96,6 @@ load_list(const char *filename,
         }
 
         list_add(list, note);
-
-        note = note->next;
-
 
     }
 
@@ -154,6 +153,32 @@ list_save(const char *filename,
 
     list->head = NULL;
     list->size = 0;
+
+    return 1;
+}
+/*
+ * This is to free memory. If we load the list
+ * but do not make any changes, it doesn't make sense
+ * to go through the trouble of saving it.
+ */
+int
+clear_mem(NoteList *list){
+
+    if(list->head == NULL){
+        return 1;
+    }
+    Note *old_note = list->head;
+    Note *note = old_note;
+
+
+    while (note != NULL){
+        note = note->next;
+        free(old_note);
+        old_note = note;
+    }
+
+    list->size = 0;
+    list->head = NULL;
 
     return 1;
 }

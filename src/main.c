@@ -11,8 +11,8 @@ print_help();
 int
 main(int argc, char *argv[]){
 
-    char *body[MAX_BODY_LENGTH];
-    char *title[MAX_TITLE_LENGTH];
+    char body[MAX_BODY_LENGTH];
+    char title[MAX_TITLE_LENGTH];
     char *str_list = "list";
     char *str_help = "help";
     char *str_count = "count";
@@ -20,42 +20,64 @@ main(int argc, char *argv[]){
     char *str_view = "view";
     char *str_delete = "delete";
 
+
+    if(argc == 1){
+        print_help();
+    }
+
     /* 
-     * The list is going to be initialized and loaded from the save at the start of the program
-     */
-    
-    NoteList *list;
-
-    list_init(list);
-
-    /*
-     * strcmp returns 0 if the strings are equal
+     * The list is going to be initialized and loaded from the save if args are correct
      */
 
     if(argc == 2){
+        NoteList list;
+
+        list_init(&list);
+
+        load_list(DATA_FILE, &list);
 
         if (strcmp(argv[1], str_help) == 0){
             print_help();
         }
+
         if (strcmp(argv[1], str_add) == 0){
-            printf("adding note\n");
+
+            Note *note;
+
             /* take in title,
              * take in body,
              */
 
-            Note note = note_create(title, body);
+            printf("Please enter title (no more than 50 characters):\n");
+            fgets(title, sizeof(title), stdin);
 
-            list_add(list,note)
+            printf("Please enter body (no more than 256 characters):\n");
+            fgets(body, sizeof(body), stdin);
+
+            note = note_create(title, body);
+
+            list_add(&list, note);
+
+            list_save(DATA_FILE, &list);
         }
         if (strcmp(argv[1], str_count) == 0){
-            printf("The amount of notes that you have is: \n");
+            printf("The amount of notes that you have is: %d\n", list.size);
         }
         if (strcmp(argv[1], str_list) == 0){
-            printf("Listing notes...\n");
+            note_print_all(&list);
+            clear_mem(&list);
         }
+
     }
-    
+
     if (argc == 3){
+
+        NoteList list;
+
+        list_init(&list);
+
+        load_list(DATA_FILE, &list);
+
         if (strcmp(argv[1], str_view) == 0){
         }
 
@@ -63,6 +85,8 @@ main(int argc, char *argv[]){
 
         }
     }
+
+
 
     return 0;
 }

@@ -1,8 +1,8 @@
 #ifndef notes
 #define notes
 
-#define MAX_TITLE_LENGTH 50
-#define MAX_BODY_LENGTH 256
+#define MAX_TITLE_LENGTH 52
+#define MAX_BODY_LENGTH 600
 #define DATA_FILE "data/notes.dat"
 
 typedef struct Note
@@ -47,5 +47,8 @@ list_add(NoteList *list,
 int
 list_save(const char *filename,
           NoteList *list);
+
+int
+clear_mem(NoteList *list);
 
 #endif
