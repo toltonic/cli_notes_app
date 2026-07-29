@@ -74,7 +74,6 @@ load_list(const char *filename,
 
     FILE *fp = fopen(filename, "r");
     //FOR TESTING
-    int counter = 0;
     if (fp == NULL){
         printf("Could not load list\n");
         return 0;
@@ -98,9 +97,7 @@ load_list(const char *filename,
 
         note = note->next;
 
-        counter++;
 
-        printf("%d\n", counter);
     }
 
     fclose(fp);
