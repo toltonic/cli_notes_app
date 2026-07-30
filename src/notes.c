@@ -29,17 +29,48 @@ Note
 }
 
 
-/*
-   Note
-   note_find(const char *filename,
-   int id){
-   FILE *fp = fopen(filename, "rb");
-   if (fp == NULL){
-   printf("Could not open file %s\n", filename);
-   return;
-   }
-   }
-   */
+Note
+*note_find(NoteList *list,
+        int id){
+
+    Note *note = list->head;
+
+    while(note != NULL){
+        if(note->id == id){
+            return note;
+        }
+        note = note->next;
+        
+    }
+
+
+    return NULL;
+}
+
+int
+note_remove(NoteList *list,
+            int id){
+
+    Note *note = list->head;
+    Note *note_before = note;
+
+    while(note != NULL && note->id != id){
+        note_before = note;
+        note = note->next;
+    }
+    if (note == NULL){
+        return 0;
+    }
+    if(note_before == note){
+        list->head = note->next;
+    }else{
+        note_before->next = note->next;
+    }
+    free(note);
+    list->size--;
+
+    return 1;
+}
 
 // print a note from an id
 void
@@ -54,7 +85,7 @@ note_print_all(NoteList *list){
     Note *note = list->head;
 
     while(note != NULL){
-        printf("title: %sbody: %s\n", note->title, note->body);
+        printf("id: %d\ntitle: %sbody: %s\n", note->id, note->title, note->body);
 
         note = note->next;
     }
@@ -77,7 +108,6 @@ load_list(const char *filename,
     FILE *fp = fopen(filename, "r");
     //FOR TESTING
     if (fp == NULL){
-        printf("Could not load list\n");
         return 0;
     }
 
@@ -115,6 +145,7 @@ list_add(NoteList *list,
     note->next = list->head;
     list->head = note;
     list->size++;
+    note->id = list->size;
 
     return 1;
 }
@@ -148,7 +179,7 @@ list_save(const char *filename,
         note_old = note;
 
     }
-    
+
     fclose(fp);
 
     list->head = NULL;

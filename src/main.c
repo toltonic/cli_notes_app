@@ -19,9 +19,10 @@ main(int argc, char *argv[]){
     char *str_add = "add";
     char *str_view = "view";
     char *str_delete = "delete";
+    int id;
 
 
-    if(argc == 1){
+    if(argc == 1 || argc > 3){
         print_help();
     }
 
@@ -38,9 +39,8 @@ main(int argc, char *argv[]){
 
         if (strcmp(argv[1], str_help) == 0){
             print_help();
-        }
 
-        if (strcmp(argv[1], str_add) == 0){
+        }else if (strcmp(argv[1], str_add) == 0){
 
             Note *note;
 
@@ -59,14 +59,21 @@ main(int argc, char *argv[]){
             list_add(&list, note);
 
             list_save(DATA_FILE, &list);
-        }
-        if (strcmp(argv[1], str_count) == 0){
+
+        }else if (strcmp(argv[1], str_count) == 0){
             printf("The amount of notes that you have is: %d\n", list.size);
-        }
-        if (strcmp(argv[1], str_list) == 0){
+            clear_mem(&list);
+
+        }else if (strcmp(argv[1], str_list) == 0){
             note_print_all(&list);
             clear_mem(&list);
+
+        }else {
+            print_help();
+            clear_mem(&list);
+
         }
+
 
     }
 
@@ -78,11 +85,36 @@ main(int argc, char *argv[]){
 
         load_list(DATA_FILE, &list);
 
+        id = atoi(argv[2]);
+
         if (strcmp(argv[1], str_view) == 0){
-        }
 
-        if (strcmp(argv[1], str_delete) == 0){
+            Note *note = note_find(&list, id);
+            if(note == NULL){
+                printf("There is no note with that id\n");
+                 
+            }else{
+                printf("id: %d\ntitle: %sbody: %s\n", note->id, note->title, note->body);
 
+            }
+            
+            clear_mem(&list);
+
+        }else if (strcmp(argv[1], str_delete) == 0){
+
+            int ret = note_remove(&list, id);
+            if(ret == 1){
+                list_save(DATA_FILE, &list);
+                printf("Note id: %d was removed\n", id);
+
+            }else{
+                printf("There is no note with that id\n");
+                clear_mem(&list);
+            }
+
+        }else{
+            print_help();
+            clear_mem(&list);
         }
     }
 

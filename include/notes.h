@@ -2,7 +2,7 @@
 #define notes
 
 #define MAX_TITLE_LENGTH 52
-#define MAX_BODY_LENGTH 600
+#define MAX_BODY_LENGTH 258
 #define DATA_FILE "data/notes.dat"
 
 typedef struct Note
@@ -26,6 +26,14 @@ typedef struct NoteList
 Note
 *note_create(const char *title,
             const char *body);
+
+Note
+*note_find(NoteList *list,
+           int id);
+
+int
+note_remove(NoteList *list,
+            int id);
 
 void
 note_print_all(NoteList *list);
